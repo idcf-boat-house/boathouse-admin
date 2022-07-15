@@ -63,6 +63,7 @@ workspace:
     ruoyi-nacos:
       container_name: ruoyi-nacos
       image: nacos/nacos-server:v2.0.4
+      restart: always
       build:
         context: './.ide/nacos'
       environment:
@@ -77,6 +78,12 @@ workspace:
         - 8848:8848
         - 9848:9848
         - 9849:9849
+      healthcheck:
+        test: curl -f http://localhost:8848 || exit 1
+        interval: 1m30s
+        timeout: 10s
+        retries: 3
+        start_period: 30s
       depends_on:
         ruoyi-db:
           condition: service_healthy
