@@ -1,6 +1,6 @@
 # SmartIDE 快速启动RuoYi-cloud项目
 ## 若依微服务项目介绍:
-- 若依微服务版本:使用的前端技术Vue、Element、后端Spring Cloud & Alibaba微服务的权限管理系统。详细介绍见:http://doc.ruoyi.vip/ruoyi-cloud/ 。
+- 若依微服务版本：使用的前端技术Vue、Element、后端Spring Cloud & Alibaba微服务的权限管理系统。详细介绍见:http://doc.ruoyi.vip/ruoyi-cloud/ 。
 - 项目本身包括多个微服务
 ```
 com.ruoyi     
@@ -26,7 +26,8 @@ com.ruoyi
 ```
 - 同时包含多个组件包括Mysql、Redis、Nacos、Node、Maven以及Sentinel。
 
-> 启动这样一个项目,不免要进行繁杂的组件安装与配置。
+> 启动这样一个项目，不免要进行繁杂的组件安装与配置。
+> **注意**，该项目启动最低要求2CPU,8G内存。
 ## SmartIDE快速启动RuoYi-Cloud项目
 下面我们使用SmartIDE快速启动这个项目，只需要一个命令行，或者在Server上通过点击，即可实现以上全部操作。
 
