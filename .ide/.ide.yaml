@@ -43,7 +43,7 @@ workspace:
         - --collation-server=utf8mb4_unicode_ci
         - --init-file=/docker-entrypoint-initdb.d/init.sql
       healthcheck:
-        test: mysql --user=root --password=password -e 'SHOW DATABASES;'
+        test: mysql --user=root --password=password -e 'SHOW DATABASES LIKE "ry-config";'
         interval: 3s
         timeout: 1s
         retries: 16
