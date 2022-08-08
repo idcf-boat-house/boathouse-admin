@@ -35,7 +35,7 @@ spec:
               value: root123
             - name: ROOT_PASSWORD
               value: root123
-          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-jetbrains-idea:latest
+          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode:latest
           imagePullPolicy: Always
           name: ruoyi-dev
           ports:
@@ -110,5 +110,47 @@ spec:
       targetPort: 3306
   selector:
     ruoyi.service: ruoyi-db
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-phpmyadmin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-phpmyadmin
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-phpmyadmin
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/boathouse/phpmyadmin:5.0.4-apache
+          imagePullPolicy: Always
+          name: ruoyi-phpmyadmin
+          ports:
+            - containerPort: 80
+          resources: {}
+          env:
+            - name: PMA_ARBITRARY
+              value: "1"
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-phpmyadmin
+spec:
+  ports:
+    - name: "8090"
+      port: 80
+      targetPort: 80
+  selector:
+    ruoyi.service: ruoyi-phpmyadmin
 status:
   loadBalancer: {}

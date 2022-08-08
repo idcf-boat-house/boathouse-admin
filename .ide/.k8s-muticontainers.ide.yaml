@@ -7,12 +7,13 @@ workspace:
     service-name: ruoyi-dev
     
     ports: # 申明端口
-      tools-webide-jb: 6800
+      tools-webide-vscode: 6800
       tools-ssh: 6822
+      tools-phpmyadmin: 8090
       apps-ruoyi-ui: 8000
       apps-ruoyi-admin: 8080
     
-    ide-type: jb-projector
+    ide-type: vscode
     volumes: 
       git-config: true
       ssh-key: true
