@@ -12,7 +12,7 @@ spec:
       ruoyi-cloud.service: ruoyi-cloud
   runtimeClassName: sysbox-runc
   containers:
-  - name: ruoyi-cloud-dev-pod
+  - name: ruoyi-cloud-dev
     image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc
     command: ["/sbin/init"]
   restartPolicy: Never
