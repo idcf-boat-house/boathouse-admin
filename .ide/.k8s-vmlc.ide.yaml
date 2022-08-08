@@ -19,4 +19,4 @@ workspace:
     command:
       - mvn package
 
-  kube-deploy-files: "ruoyi-k8s-vmlc-deployment.yaml"
+  kube-deploy-files: "ruoyi-k8s-vmlc-pod.yaml"
