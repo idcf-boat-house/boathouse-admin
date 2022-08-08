@@ -4,6 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ruoyi-cloud-deployment
+  annotations:
+    io.kubernetes.cri-o.userns-mode: "auto:size=65536"
 spec:
   replicas: 1
   selector:
@@ -17,7 +19,7 @@ spec:
         ruoyi-cloud.service: ruoyi-cloud
     spec:
       runtimeClassName: sysbox-runc
-      restartPolicy: Never
+      restartPolicy: Always
       containers:
         - env:
             - name: LOCAL_USER_PASSWORD
