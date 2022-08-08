@@ -10,6 +10,7 @@ workspace:
       tools-webide-vscode: 6800
       tools-ssh: 6822
       tools-phpmyadmin: 8090
+      tools-nacos: 8848
       apps-ruoyi-ui: 8000
       apps-ruoyi-admin: 8080
     
