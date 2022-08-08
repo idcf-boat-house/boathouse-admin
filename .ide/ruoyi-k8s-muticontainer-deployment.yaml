@@ -1,0 +1,75 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-cloud-dev-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi-cloud.service: ruoyi-cloud-dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi-cloud.service: ruoyi-cloud-dev
+    spec:
+      containers:
+        - env:
+            - name: LOCAL_USER_PASSWORD
+              value: root123
+            - name: ROOT_PASSWORD
+              value: root123
+          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-jetbrains-idea:latest
+          imagePullPolicy: Always
+          name: ruoyi-cloud-dev
+          ports:
+            - containerPort: 8080
+            - containerPort: 80
+            - containerPort: 22
+            - containerPort: 8887
+          resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-cloud-dev-service
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8000"
+      port: 8080
+      targetPort: 80
+    - name: "6800"
+      port: 6800
+      targetPort: 8887
+    - name: "6822"
+      port: 6822
+      targetPort: 22
+  selector:
+    ruoyi-cloud.service: ruoyi-cloud-dev
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ruoyi-cloud-network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              ruoyi-cloud/smartide-network: "true"
+  podSelector:
+    matchLabels:
+      ruoyi-cloud/smartide-network: "true"
