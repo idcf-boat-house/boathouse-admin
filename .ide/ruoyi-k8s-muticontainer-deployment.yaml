@@ -215,10 +215,10 @@ spec:
             - name: MODE
               value: standalone
           volumeMounts:
-            - name: ruoyi-nacos-config-vol
-              mountPath: /home/nacos/conf/
+            - name: ruoyi-nacos-config
+              mountPath: /home/nacos/conf
       volumes:
-        - name: ruoyi-nacos-config-vol
+        - name: ruoyi-nacos-config
           configMap:
             name: ruoyi-nacos-configmap
 status: {}
