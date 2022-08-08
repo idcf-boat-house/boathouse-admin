@@ -4,7 +4,7 @@ orchestrator:
   version: 3
 workspace:
   dev-container:
-    service-name: ruoyi-cloud-dev
+    service-name: ruoyi-dev
     
     ports: # 申明端口
       tools-webide-jb: 6800
