@@ -148,7 +148,7 @@ metadata:
 spec:
   ports:
     - name: "8090"
-      port: 80
+      port: 8090
       targetPort: 80
   selector:
     ruoyi.service: ruoyi-phpmyadmin
