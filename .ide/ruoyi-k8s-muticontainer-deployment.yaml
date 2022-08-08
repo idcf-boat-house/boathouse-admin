@@ -45,7 +45,7 @@ spec:
       port: 8080
       targetPort: 8080
     - name: "8000"
-      port: 8080
+      port: 8000
       targetPort: 80
     - name: "6800"
       port: 6800
