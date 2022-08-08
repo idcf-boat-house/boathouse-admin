@@ -2,32 +2,32 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: ruoyi-cloud-network
+  name: ruoyi-network
 spec:
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              ruoyi-cloud/smartide-network: "true"
+              ruoyi/smartide-network: "true"
   podSelector:
     matchLabels:
-      ruoyi-cloud/smartide-network: "true"
+      ruoyi/smartide-network: "true"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ruoyi-cloud-dev-deployment
+  name: ruoyi-dev-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      ruoyi-cloud.service: ruoyi-cloud-dev
+      ruoyi.service: ruoyi-dev
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        ruoyi-cloud.service: ruoyi-cloud-dev
+        ruoyi.service: ruoyi-dev
     spec:
       containers:
         - env:
@@ -37,7 +37,7 @@ spec:
               value: root123
           image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-jetbrains-idea:latest
           imagePullPolicy: Always
-          name: ruoyi-cloud-dev
+          name: ruoyi-dev
           ports:
             - containerPort: 8080
             - containerPort: 80
@@ -49,7 +49,7 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ruoyi-cloud-dev-service
+  name: ruoyi-dev
 spec:
   ports:
     - name: "8080"
@@ -65,30 +65,30 @@ spec:
       port: 6822
       targetPort: 22
   selector:
-    ruoyi-cloud.service: ruoyi-cloud-dev
+    ruoyi.service: ruoyi-dev
 status:
   loadBalancer: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ruoyi-cloud-db-deployment
+  name: ruoyi-db-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      ruoyi-cloud.service: ruoyi-cloud-db
+      ruoyi.service: ruoyi-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        ruoyi-cloud.service: ruoyi-cloud-db
+        ruoyi.service: ruoyi-db
     spec:
       containers:
         - image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
           imagePullPolicy: Always
-          name: ruoyi-cloud-db
+          name: ruoyi-db
           ports:
             - containerPort: 3306
           resources: {}
@@ -102,13 +102,13 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ruoyi-cloud-db-service
+  name: ruoyi-db
 spec:
   ports:
     - name: "3306"
       port: 3306
       targetPort: 3306
   selector:
-    ruoyi-cloud.service: ruoyi-cloud-db
+    ruoyi.service: ruoyi-db
 status:
   loadBalancer: {}
