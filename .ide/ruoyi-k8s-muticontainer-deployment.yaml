@@ -1,5 +1,18 @@
 ---
-
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ruoyi-cloud-network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              ruoyi-cloud/smartide-network: "true"
+  podSelector:
+    matchLabels:
+      ruoyi-cloud/smartide-network: "true"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,9 +45,7 @@ spec:
             - containerPort: 8887
           resources: {}
 status: {}
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,19 +68,47 @@ spec:
     ruoyi-cloud.service: ruoyi-cloud-dev
 status:
   loadBalancer: {}
-
 ---
-
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: ruoyi-cloud-network
+  name: ruoyi-cloud-db-deployment
 spec:
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              ruoyi-cloud/smartide-network: "true"
-  podSelector:
+  replicas: 1
+  selector:
     matchLabels:
-      ruoyi-cloud/smartide-network: "true"
+      ruoyi-cloud.service: ruoyi-cloud-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi-cloud.service: ruoyi-cloud-db
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
+          imagePullPolicy: Always
+          name: ruoyi-cloud-db
+          ports:
+            - containerPort: 3306
+          resources: {}
+          env:
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-cloud-db-service
+spec:
+  ports:
+    - name: "3306"
+      port: 3306
+      targetPort: 3306
+  selector:
+    ruoyi-cloud.service: ruoyi-cloud-db
+status:
+  loadBalancer: {}
