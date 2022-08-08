@@ -10,14 +10,13 @@ workspace:
     ports: # 申明端口
       tools-webide-vscode: 6800
       tools-ssh: 6822
-      apps-application: 3001
+      apps-application: 8080
     
     ide-type: vscode
     volumes: 
       git-config: true
       ssh-key: true
     command:
-      - npm config set registry https://registry.npmmirror.com
-      - npm install
+      - mvn package
 
   kube-deploy-files: "*-deployment.yaml"  

@@ -38,9 +38,9 @@ metadata:
   name: ruoyi-cloud-service
 spec:
   ports:
-    - name: "3001"
-      port: 3001
-      targetPort: 3001
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
     - name: "6800"
       port: 6800
       targetPort: 3000
