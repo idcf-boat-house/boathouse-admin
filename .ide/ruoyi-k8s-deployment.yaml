@@ -26,6 +26,8 @@ spec:
           image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode:latest
           imagePullPolicy: Always
           name: ruoyi-dev-dev
+          ports:
+            - containerPort: 8080
           resources: {}
 status: {}
 
@@ -34,7 +36,7 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ruoyi-dev
+  name: ruoyi-dev-service
 spec:
   ports:
     - name: "8080"
