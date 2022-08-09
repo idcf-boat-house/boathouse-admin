@@ -4,6 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ruoyi-cloud-deployment
+  annotations:
+    io.kubernetes.cri-o.userns-mode: "auto:size=65536"
 spec:
   replicas: 1
   selector:
@@ -16,17 +18,20 @@ spec:
       labels:
         ruoyi-cloud.service: ruoyi-cloud
     spec:
+      runtimeClassName: sysbox-runc
+      restartPolicy: Always
       containers:
         - env:
             - name: LOCAL_USER_PASSWORD
               value: root123
             - name: ROOT_PASSWORD
               value: root123
-          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode:latest
+          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc:latest
+          command: ["/sbin/init"]
           imagePullPolicy: Always
           name: ruoyi-cloud-dev
           ports:
-            - containerPort: 3001
+            - containerPort: 8080
           resources: {}
 status: {}
 

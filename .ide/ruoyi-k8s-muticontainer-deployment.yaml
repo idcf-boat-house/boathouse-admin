@@ -1,0 +1,285 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ruoyi-network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              ruoyi/smartide-network: "true"
+  podSelector:
+    matchLabels:
+      ruoyi/smartide-network: "true"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-dev-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-dev
+    spec:
+      containers:
+        - env:
+            - name: LOCAL_USER_PASSWORD
+              value: root123
+            - name: ROOT_PASSWORD
+              value: root123
+          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode:latest
+          imagePullPolicy: Always
+          name: ruoyi-dev
+          ports:
+            - containerPort: 8080
+            - containerPort: 80
+            - containerPort: 22
+            - containerPort: 3000
+          resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-dev
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8000"
+      port: 8000
+      targetPort: 80
+    - name: "6800"
+      port: 6800
+      targetPort: 3000
+    - name: "6822"
+      port: 6822
+      targetPort: 22
+  selector:
+    ruoyi.service: ruoyi-dev
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-db
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
+          imagePullPolicy: Always
+          name: ruoyi-db
+          ports:
+            - containerPort: 3306
+          resources: {}
+          env:
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          args:
+            - "--default-authentication-plugin=mysql_native_password"
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-db
+spec:
+  ports:
+    - name: "3306"
+      port: 3306
+      targetPort: 3306
+  selector:
+    ruoyi.service: ruoyi-db
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-phpmyadmin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-phpmyadmin
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-phpmyadmin
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/boathouse/phpmyadmin:5.0.4-apache
+          imagePullPolicy: Always
+          name: ruoyi-phpmyadmin
+          ports:
+            - containerPort: 80
+          resources: {}
+          env:
+            - name: PMA_ARBITRARY
+              value: "1"
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-phpmyadmin
+spec:
+  ports:
+    - name: "8090"
+      port: 8090
+      targetPort: 80
+  selector:
+    ruoyi.service: ruoyi-phpmyadmin
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ruoyi-nacos-configmap
+data:
+  application.properties: |
+    spring.datasource.platform=mysql
+    db.num=1
+    db.url.0=jdbc:mysql://ruoyi-db:3306/ry-config?characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000\
+      &autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+    db.user=root
+    db.password=password
+    nacos.naming.empty-service.auto-clean=true
+    nacos.naming.empty-service.clean.initial-delay-ms=50000
+    nacos.naming.empty-service.clean.period-time-ms=30000
+    management.endpoints.web.exposure.include=*
+    management.metrics.export.elastic.enabled=false
+    management.metrics.export.influx.enabled=false
+    server.tomcat.accesslog.enabled=true
+    server.tomcat.accesslog.pattern=%h %l %u %t "%r" %s %b %D %{User-Agent}i %{Request-Source}i
+    server.tomcat.basedir=
+    nacos.security.ignore.urls=/,/error,/**/*.css,/**/*.js,/**/*.html,/**/*.map,/**/*.svg,/**/*.png,/**/*.ico,/console-ui/public/**,/v1/auth/**,/v1/console/health/**,/actuator/**,/v1/console/server/**
+    nacos.core.auth.system.type=nacos
+    nacos.core.auth.enabled=false
+    nacos.core.auth.default.token.expire.seconds=18000
+    nacos.core.auth.default.token.secret.key=SecretKey012345678901234567890123456789012345678901234567890123456789
+    nacos.core.auth.caching.enabled=true
+    nacos.core.auth.enable.userAgentAuthWhite=false
+    nacos.core.auth.server.identity.key=serverIdentity
+    nacos.core.auth.server.identity.value=security
+    nacos.istio.mcp.server.enabled=false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-nacos-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-nacos
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-nacos
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/smartide/nacos-server:v2.0.4
+          imagePullPolicy: Always
+          name: ruoyi-nacos
+          ports:
+            - containerPort: 8848
+            - containerPort: 9848
+            - containerPort: 9849
+          env:
+            - name: MODE
+              value: standalone
+          volumeMounts:
+            - name: ruoyi-nacos-config
+              mountPath: /home/nacos/conf
+      volumes:
+        - name: ruoyi-nacos-config
+          configMap:
+            name: ruoyi-nacos-configmap
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-nacos
+spec:
+  ports:
+    - name: "8848"
+      port: 8848
+      targetPort: 8848
+    - name: "9848"
+      port: 9848
+      targetPort: 9848
+    - name: "9849"
+      port: 9849
+      targetPort: 9849
+  selector:
+    ruoyi.service: ruoyi-nacos
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ruoyi.service: ruoyi-redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        ruoyi.service: ruoyi-redis
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/smartide/redis:6.0.6
+          imagePullPolicy: Always
+          name: ruoyi-redis
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-redis
+spec:
+  ports:
+    - name: "6379"
+      port: 6379
+      targetPort: 6379
+  selector:
+    ruoyi.service: ruoyi-redis
+status:
+  loadBalancer: {}

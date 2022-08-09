@@ -5,21 +5,18 @@ orchestrator:
 workspace:
   dev-container:
     service-name: ruoyi-cloud-dev
+    webide-port: 6800
     
     ports: # 申明端口
-      tools-webide-idea: 6800
+      tools-webide-vscode: 6800
       tools-ssh: 6822
-      tools-phpmyadmin: 8090
-      tools-nacos: 8848
-      tools-sonar: 9000
-      apps-ruoyi-ui: 8000
-      apps-ruoyi-admin: 8080
+      apps-application: 8080
     
-    ide-type: vscode
+    ide-type: jb-projector
     volumes: 
       git-config: true
       ssh-key: true
     command:
       - mvn package
 
-  kube-deploy-files: "ruoyi-k8s-deployment.yaml"
+  kube-deploy-files: "ruoyi-k8s-vmlc-deployment.yaml"
