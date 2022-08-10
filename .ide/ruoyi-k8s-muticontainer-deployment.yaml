@@ -421,7 +421,7 @@ data:
     nacos.core.auth.server.identity.key=serverIdentity
     nacos.core.auth.server.identity.value=security
     nacos.istio.mcp.server.enabled=false
-  logback.xml: |
+  nacos-logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <configuration debug="false" scan="true" scanPeriod="1 seconds">
         <contextName>logback</contextName>
