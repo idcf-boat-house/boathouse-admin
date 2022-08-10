@@ -28,7 +28,7 @@ services:
     image: nacos/nacos-server:v2.0.4
     restart: always
     build:
-      context: './.ide/nacos'
+      context: './nacos'
     environment:
       MODE: standalone
     volumes:
