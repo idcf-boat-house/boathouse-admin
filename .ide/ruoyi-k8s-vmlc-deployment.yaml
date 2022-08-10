@@ -1,57 +1,55 @@
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: ruoyi-cloud-deployment
+  name: ruoyi-cloud-dev
   annotations:
     io.kubernetes.cri-o.userns-mode: "auto:size=65536"
+  labels:
+    ruoyi-cloud.service: ruoyi-cloud
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      ruoyi-cloud.service: ruoyi-cloud
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        ruoyi-cloud.service: ruoyi-cloud
-    spec:
-      runtimeClassName: sysbox-runc
-      restartPolicy: Always
-      containers:
-        - env:
-            - name: LOCAL_USER_PASSWORD
-              value: root123
-            - name: ROOT_PASSWORD
-              value: root123
-          image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc:latest
-          command: ["/sbin/init"]
-          imagePullPolicy: Always
-          name: ruoyi-cloud-dev
-          ports:
-            - containerPort: 8080
-          resources: {}
-status: {}
+  runtimeClassName: sysbox-runc
+  containers:
+  - name: ruoyi-cloud-dev
+    image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc:latest
+    command: ["/sbin/init"]
+    imagePullPolicy: Always
+    ports:
+      - containerPort: 22
+      - containerPort: 3000
+      - containerPort: 8848
+      - containerPort: 8090
+      - containerPort: 80
+      - containerPort: 8080
+      - containerPort: 8848
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: ruoyi-cloud-service
+  name: ruoyi-cloud-dev
 spec:
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
-    - name: "6800"
-      port: 6800
-      targetPort: 3000
-    - name: "6822"
+    - name: "tools-ssh-6822"
       port: 6822
       targetPort: 22
+    - name: "tools-webide-vscode-6800"
+      port: 6800
+      targetPort: 3000
+    - name: "tools-nacos-8848"
+      port: 8848
+      targetPort: 8848
+    - name: "tools-phpmyadmin-8090"
+      port: 8090
+      targetPort: 8090
+    - name: "apps-ruoyi-ui-8000"
+      port: 8000
+      targetPort: 80
+    - name: "apps-ruoyi-admin-8080"
+      port: 8080
+      targetPort: 8080
   selector:
     ruoyi-cloud.service: ruoyi-cloud
 status:

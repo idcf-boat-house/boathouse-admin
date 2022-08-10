@@ -5,14 +5,15 @@ orchestrator:
 workspace:
   dev-container:
     service-name: ruoyi-cloud-dev
-    webide-port: 6800
-    
     ports: # 申明端口
       tools-webide-vscode: 6800
       tools-ssh: 6822
-      apps-application: 8080
+      tools-phpmyadmin: 8090
+      tools-nacos: 8848
+      apps-ruoyi-ui: 8000
+      apps-ruoyi-admin: 8080
     
-    ide-type: jb-projector
+    ide-type: vscode
     volumes: 
       git-config: true
       ssh-key: true
