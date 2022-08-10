@@ -480,6 +480,15 @@ spec:
         - image: registry.cn-hangzhou.aliyuncs.com/smartide/nacos-server:v2.0.4
           imagePullPolicy: Always
           name: ruoyi-nacos
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /nacos/index.html
+              port: 8848
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           ports:
             - containerPort: 8848
             - containerPort: 9848
