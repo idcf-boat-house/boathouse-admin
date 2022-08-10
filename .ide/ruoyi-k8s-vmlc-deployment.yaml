@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ruoyi-cloud-pod
+  name: ruoyi-cloud-dev
   annotations:
     io.kubernetes.cri-o.userns-mode: "auto:size=65536"
   labels:
