@@ -1,6 +1,6 @@
 version : '3.8'
 services:
-  ruoyi-db:
+  ruoyi-mysql:
     image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
     command:
       - --default-authentication-plugin=mysql_native_password
@@ -48,7 +48,7 @@ services:
       retries: 3
       start_period: 30s
     depends_on:
-      ruoyi-db:
+      ruoyi-mysql:
         condition: service_healthy
 
   ruoyi-phpmyadmin:
