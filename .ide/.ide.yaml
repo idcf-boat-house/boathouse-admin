@@ -18,6 +18,7 @@ workspace:
       git-config: true
       ssh-key: true
     command:
+      - cd /home/project
       - mvn package
       - code --install-extension vscjava.vscode-java-pack
       - cd ruoyi-ui && npm config set registry https://registry.npmmirror.com && npm install
