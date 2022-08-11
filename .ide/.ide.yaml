@@ -20,7 +20,7 @@ workspace:
     command:
       - mvn package
       - code --install-extension vscjava.vscode-java-pack
-      - cd ruoyi-ui && npm install
+      - cd ruoyi-ui && npm config set registry https://registry.npmmirror.com && npm install
       - cd ../.ide/ && docker compose -f docker-compose-debug.yml up -d
 
   kube-deploy-files: "ruoyi-k8s-vmlc-deployment.yaml"
