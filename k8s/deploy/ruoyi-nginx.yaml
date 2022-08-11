@@ -7,6 +7,7 @@ spec:
     - name: "8000"
       port: 8000
       targetPort: 80
+      nodePort: 8000
   selector:
     app: ruoyi-nginx
   clusterIP: None
