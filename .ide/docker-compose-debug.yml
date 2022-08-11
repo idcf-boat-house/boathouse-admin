@@ -25,7 +25,7 @@ services:
 
   ruoyi-nacos:
     container_name: ruoyi-nacos
-    image: nacos/nacos-server:v2.0.4
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/nacos-server:v2.0.4
     restart: always
     build:
       context: './nacos'

@@ -1,0 +1,69 @@
+version : '3.8'
+services:
+  ruoyi-mysql:
+    container_name: ruoyi-mysql
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-mysql
+    ports:
+      - "3306:3306"
+    command: [
+          'mysqld',
+          '--innodb-buffer-pool-size=80M',
+          '--character-set-server=utf8mb4',
+          '--collation-server=utf8mb4_unicode_ci',
+          '--default-time-zone=+8:00',
+          '--lower-case-table-names=1'
+        ]
+    environment:
+      MYSQL_DATABASE: 'ry-cloud'
+      MYSQL_ROOT_PASSWORD: password
+
+  ruoyi-nacos:
+    container_name: ruoyi-nacos
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-nacos
+    environment:
+      - MODE=standalone
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    depends_on:
+      - ruoyi-mysql
+
+  ruoyi-redis:
+    container_name: ruoyi-redis
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-redis:latest
+    ports:
+      - "6379:6379"
+    command: redis-server /home/ruoyi/redis/redis.conf
+
+  ruoyi-nginx:
+    container_name: ruoyi-nginx
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - ruoyi-gateway
+
+  ruoyi-gateway:
+    container_name: ruoyi-gateway
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-gateway:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ruoyi-redis
+
+  ruoyi-auth:
+    container_name: ruoyi-auth
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-auth:latest
+    ports:
+      - "9200:9200"
+    depends_on:
+      - ruoyi-redis
+
+  ruoyi-modules-system:
+    container_name: ruoyi-modules-system
+    ports:
+      - "9201:9201"
+    depends_on:
+      - ruoyi-redis
+      - ruoyi-mysql

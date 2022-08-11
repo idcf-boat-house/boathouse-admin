@@ -1,5 +1,5 @@
 # 基础镜像
-FROM nginx
+FROM registry.cn-hangzhou.aliyuncs.com/boathouse/nginx:latest
 # author
 MAINTAINER ruoyi
 
