@@ -1,0 +1,95 @@
+version : '3.8'
+services:
+  ruoyi-mysql:
+    container_name: ruoyi-mysql
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-mysql:v1
+    ports:
+      - "3306:3306"
+    command: [
+          'mysqld',
+          '--innodb-buffer-pool-size=80M',
+          '--character-set-server=utf8mb4',
+          '--collation-server=utf8mb4_unicode_ci',
+          '--default-time-zone=+8:00',
+          '--lower-case-table-names=1'
+        ]
+    healthcheck:
+      test: mysql --user=root --password=password -e 'SHOW DATABASES LIKE "ry-config";'
+      interval: 3s
+      timeout: 1s
+      retries: 16
+    environment:
+      MYSQL_DATABASE: 'ry-cloud'
+      MYSQL_ROOT_PASSWORD: password
+
+  ruoyi-nacos:
+    container_name: ruoyi-nacos
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-nacos:v1
+    environment:
+      - MODE=standalone
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    healthcheck:
+      test: curl -f http://localhost:8848/nacos/index.html || kill 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      ruoyi-mysql:
+        condition: service_healthy
+
+  ruoyi-redis:
+    container_name: ruoyi-redis
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-redis:v1
+    ports:
+      - "6379:6379"
+    command: redis-server /home/ruoyi/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  ruoyi-nginx:
+    container_name: ruoyi-nginx
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-nginx:v1
+    ports:
+      - "8000:80"
+    depends_on:
+      - ruoyi-gateway
+
+  ruoyi-gateway:
+    container_name: ruoyi-gateway
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-gateway:v1
+    ports:
+      - "8080:8080"
+    depends_on:
+      ruoyi-nacos:
+        condition: service_healthy
+      ruoyi-redis:
+        condition: service_healthy
+
+  ruoyi-auth:
+    container_name: ruoyi-auth
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-auth:v1
+    ports:
+      - "9200:9200"
+    depends_on:
+      ruoyi-nacos:
+        condition: service_healthy
+      ruoyi-redis:
+        condition: service_healthy
+
+  ruoyi-modules-system:
+    container_name: ruoyi-modules-system
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-modules-system:v1
+    ports:
+      - "9201:9201"
+    depends_on:
+      ruoyi-nacos:
+        condition: service_healthy
+      ruoyi-redis:
+        condition: service_healthy

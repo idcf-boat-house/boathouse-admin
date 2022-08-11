@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-modules-system
+spec:
+  ports:
+    - name: "9201"
+      port: 9201
+      targetPort: 9201
+  selector:
+    app: ruoyi-modules-system
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-modules-system
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: ruoyi-modules-system
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ruoyi-modules-system
+    spec:
+      containers:
+      - name: ruoyi-modules-system
+        image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-modules-system:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 9201

@@ -1,6 +1,6 @@
 version : '3.8'
 services:
-  ruoyi-db:
+  ruoyi-mysql:
     image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
     command:
       - --default-authentication-plugin=mysql_native_password
@@ -25,7 +25,7 @@ services:
 
   ruoyi-nacos:
     container_name: ruoyi-nacos
-    image: nacos/nacos-server:v2.0.4
+    image: registry.cn-hangzhou.aliyuncs.com/boathouse/nacos-server:v2.0.4
     restart: always
     build:
       context: './nacos'
@@ -48,7 +48,7 @@ services:
       retries: 3
       start_period: 30s
     depends_on:
-      ruoyi-db:
+      ruoyi-mysql:
         condition: service_healthy
 
   ruoyi-phpmyadmin:

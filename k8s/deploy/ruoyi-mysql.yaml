@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ruoyi-mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: ruoyi-mysql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ruoyi-mysql
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: ruoyi-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ruoyi-mysql
+    spec:
+      containers:
+      - name: ruoyi-mysql
+        image: registry.cn-hangzhou.aliyuncs.com/boathouse/ruoyi-mysql:v1
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_DATABASE
+            value: "ry-cloud"
+          - name: MYSQL_ROOT_PASSWORD
+            value: "password"
+        ports:
+          - containerPort: 3306
+        args:
+          - "--default-authentication-plugin=mysql_native_password"
+          - "--character-set-server=utf8mb4"
+          - "--collation-server=utf8mb4_unicode_ci"
+          - "--default-time-zone=+8:00"
+          - "--lower-case-table-names=1"
+          - "--innodb-buffer-pool-size=80M"
