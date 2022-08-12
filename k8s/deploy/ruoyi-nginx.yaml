@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: ruoyi-nginx
 spec:
+  type: NodePort
   ports:
     - name: "8000"
       port: 8000
       targetPort: 80
-      nodePort: 8000
+      nodePort: 30068
   selector:
     app: ruoyi-nginx
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
