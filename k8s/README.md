@@ -2,7 +2,7 @@
 
 ```shell
 kind create cluster \
-    --config config.yaml \
+    --config /home/project/k8s/config.yaml \
     --image registry.cn-hangzhou.aliyuncs.com/smartide/nestybox-kindestnode:v1.20.7
 
 
