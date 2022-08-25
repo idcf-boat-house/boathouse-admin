@@ -1,6 +1,6 @@
 version : '3.8'
 services:
-  ruoyi-dev:
+  ruoyi-cloud-dev:
     image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc:latest
     restart: always
     runtime: sysbox-runc
