@@ -1,0 +1,19 @@
+version : '3.8'
+services:
+  ruoyi-dev:
+    image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-java-v2-vscode-vmlc:latest
+    restart: always
+    runtime: sysbox-runc
+    hostname: ruoyi-cloud-dev
+    ports:
+      - 8080:8080
+      - 8000:8000
+      - 6822:22
+      - 6800:3000
+      - 8090:8909
+      - 8848:8848
+    volumes:
+      - .:/home/project
+      - $HOME/.m2/repository:/home/smartide/.m2/repository
+    networks:
+      - ruoyi-dev-network

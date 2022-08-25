@@ -1,6 +1,6 @@
 version: smartide/v0.2
 orchestrator:
-  type: k8s
+  type: allinone
   version: 3
 workspace:
   dev-container:
@@ -25,4 +25,5 @@ workspace:
       - cd ../.ide/ && docker compose -f docker-compose-debug.yml up -d
       - code --install-extension ms-azuretools.vscode-docker
 
-  kube-deploy-files: "ruoyi-k8s-vmlc-deployment.yaml"
+  kube-deploy-files: "ruoyi-k8s-deployment-vmlc.yaml" 
+  docker-compose-file: "ruoyi-docker-compose-vmlc.yaml"
