@@ -17,3 +17,7 @@ services:
       - $HOME/.m2/repository:/home/smartide/.m2/repository
     networks:
       - ruoyi-dev-network
+  
+  networks:
+    ruoyi-dev-network:
+      external: true
