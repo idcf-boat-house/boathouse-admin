@@ -18,6 +18,6 @@ services:
     networks:
       - ruoyi-dev-network
   
-  networks:
-    ruoyi-dev-network:
-      external: true
+networks:
+  ruoyi-dev-network:
+    external: true
