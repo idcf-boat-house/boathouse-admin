@@ -9,12 +9,13 @@
     <version>3.5.0</version>
 
     <repositories>
-        <!-- 使用华为云 maven 库 -->
+        <!-- 使用华为云 maven 库 
         <repository>
             <id>huaweicloud</id>
             <name>huaweicloud</name>
             <url>https://mirrors.huaweicloud.com/repository/maven/</url>
         </repository>
+        -->
         <!-- 使用阿里 maven 库 -->
         <repository>
             <id>ali-maven</id>
@@ -23,6 +24,7 @@
         </repository>
     </repositories>
     <pluginRepositories>
+        <!--
         <pluginRepository>
             <id>huaweicloud</id>
             <name>local private nexus</name>
@@ -34,6 +36,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
+        -->
         <pluginRepository>
             <id>ali-maven</id>
             <name>local private nexus</name>
