@@ -29,7 +29,7 @@ workspace:
       - cd ruoyi-ui && npm config set registry https://registry.npmmirror.com && npm install
       - echo "------5.应用依赖第三方组件启动（Docker方式）--------"
       - cd ../.ide/ && docker compose -f docker-compose-debug.yml up -d
-      - echo "------5.安装Docker管理工具扩展包--------"
+      - echo "------6.安装Docker管理工具扩展包--------"
       - code --install-extension ms-azuretools.vscode-docker
 
   kube-deploy-files: "ruoyi-k8s-deployment-vmlc.yaml" 
