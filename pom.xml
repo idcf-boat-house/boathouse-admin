@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ruoyi</groupId>
@@ -18,9 +17,34 @@
         -->
         <!-- 使用阿里 maven 库 -->
         <repository>
-            <id>ali-maven</id>
-            <name>ali-maven</name>
+            <id>ali-maven-central</id>
+            <name>ali-maven-central</name>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </repository>
+        <repository>
+            <id>ali-maven-public</id>
+            <name>ali-maven-public</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>ali-maven-spring</id>
+            <url>https://maven.aliyun.com/repository/spring</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>ali-maven-spring-plugin</id>
+            <url>https://maven.aliyun.com/repository/spring-plugin</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -39,7 +63,7 @@
         -->
         <pluginRepository>
             <id>ali-maven</id>
-            <name>local private nexus</name>
+            <name>阿里云插件仓库</name>
             <url>https://maven.aliyun.com/repository/public</url>
             <releases>
                 <enabled>true</enabled>
@@ -200,9 +224,9 @@
             </dependency>
 
             <!-- Collection 增强Java集合框架 -->
-            <dependency> 
-                <groupId>commons-collections</groupId> 
-                <artifactId>commons-collections</artifactId> 
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
                 <version>${commons-collections.version}</version>
             </dependency>
 

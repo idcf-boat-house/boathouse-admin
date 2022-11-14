@@ -19,10 +19,17 @@ workspace:
       ssh-key: true
     command:
       - cd /home/project
+      - echo "------1.执行maven打包--------"
       - mvn package
+      - echo "------2.安装Java插件扩展包--------"
       - code --install-extension vscjava.vscode-java-pack
+      - echo "------3.修改hosts文件配置--------"
+      - sudo chmod o+w /etc/hosts && echo "127.0.0.1 ruoyi-nacos" >> /etc/hosts && echo "127.0.0.1 ruoyi-gateway" >> /etc/hosts && sudo chmod o-w /etc/hosts
+      - echo "------4.前端构建--------"
       - cd ruoyi-ui && npm config set registry https://registry.npmmirror.com && npm install
+      - echo "------5.应用依赖第三方组件启动（Docker方式）--------"
       - cd ../.ide/ && docker compose -f docker-compose-debug.yml up -d
+      - echo "------5.安装Docker管理工具扩展包--------"
       - code --install-extension ms-azuretools.vscode-docker
 
   kube-deploy-files: "ruoyi-k8s-deployment-vmlc.yaml" 
