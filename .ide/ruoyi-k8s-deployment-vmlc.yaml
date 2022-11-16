@@ -30,6 +30,11 @@ spec:
       - containerPort: 80
       - containerPort: 8080
       - containerPort: 8848
+    env:
+      - name: LOCAL_USER_PASSWORD
+        value: root123
+      - name: MARKETPLACE_URL
+        value: https://marketplace.smartide.cn
 
 ---
 
