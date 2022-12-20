@@ -28,7 +28,7 @@ workspace:
       - echo "------4.前端构建--------"
       - cd ruoyi-ui && npm config set registry https://registry.npmmirror.com && npm install
       - echo "------5.应用依赖第三方组件启动（Docker方式）--------"
-      - cd ../.ide/ && docker compose -f docker-compose-debug.yml up -d
+      - cd ../.ide/ && chmod 777 -R mysql && chmod 777 -R nacos && docker compose -f docker-compose-debug.yml up -d
       - echo "------6.安装Docker管理工具扩展包--------"
       - code --install-extension ms-azuretools.vscode-docker
 
